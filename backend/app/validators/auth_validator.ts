@@ -11,9 +11,9 @@ export const signupValidator = vine.compile(
         return !user
       }),
     password: vine.string().minLength(8),
-    nom: vine.string().minLength(1),
-    prenom: vine.string().minLength(1),
-    type: vine.enum(['enseignant']),
+    firstName: vine.string().minLength(1),
+    lastName: vine.string().minLength(1),
+    role: vine.enum(['teacher']).optional(),
   })
 )
 
@@ -23,4 +23,3 @@ export const loginValidator = vine.compile(
     password: vine.string(),
   })
 )
-
