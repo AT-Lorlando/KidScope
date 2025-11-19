@@ -1,12 +1,5 @@
 import { defineStore } from 'pinia'
-
-export interface User {
-  id: number
-  email: string
-  nom: string | null
-  prenom: string | null
-  type: 'enseignant'
-}
+import type { User } from '~/types'
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -27,11 +20,11 @@ export const useAuthStore = defineStore('auth', {
       await this.fetchProfile()
     },
 
-    async signup(email: string, password: string, nom: string, prenom: string) {
+    async signup(email: string, password: string, firstName: string, lastName: string) {
       const api = useAPI()
       await api('/signup', {
         method: 'POST',
-        body: { email, password, nom, prenom, type: 'enseignant' },
+        body: { email, password, firstName, lastName, role: 'teacher' },
       })
       await this.fetchProfile()
     },
@@ -45,9 +38,9 @@ export const useAuthStore = defineStore('auth', {
         this.user = {
           id: user.id,
           email: user.email,
-          nom: user.nom ?? null,
-          prenom: user.prenom ?? null,
-          type: user.type,
+          firstName: user.firstName ?? null,
+          lastName: user.lastName ?? null,
+          role: user.role,
         }
       } catch (error) {
         this.user = null
@@ -67,4 +60,3 @@ export const useAuthStore = defineStore('auth', {
     },
   },
 })
-
