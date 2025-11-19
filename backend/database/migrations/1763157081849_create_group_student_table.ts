@@ -1,27 +1,27 @@
 import { BaseSchema } from '@adonisjs/lucid/schema'
 
 export default class extends BaseSchema {
-  protected tableName = 'groupe_eleve'
+  protected tableName = 'group_student'
 
   async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id').notNullable()
       table
-        .integer('groupe_id')
+        .integer('group_id')
         .unsigned()
         .references('id')
-        .inTable('groupes')
+        .inTable('groups')
         .onDelete('CASCADE')
         .notNullable()
       table
-        .integer('eleve_id')
+        .integer('student_id')
         .unsigned()
         .references('id')
-        .inTable('eleves')
+        .inTable('students')
         .onDelete('CASCADE')
         .notNullable()
 
-      table.unique(['groupe_id', 'eleve_id'])
+      table.unique(['group_id', 'student_id'])
       table.timestamp('created_at').notNullable()
       table.timestamp('updated_at').nullable()
     })

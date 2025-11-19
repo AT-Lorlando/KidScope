@@ -1,15 +1,15 @@
 import { BaseSchema } from '@adonisjs/lucid/schema'
 
 export default class extends BaseSchema {
-  protected tableName = 'eleves'
+  protected tableName = 'students'
 
   async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id').notNullable()
-      table.string('nom').notNullable()
-      table.string('prenom').notNullable()
-      table.date('date_naissance').notNullable()
-      table.enum('niveau', [
+      table.string('last_name').notNullable()
+      table.string('first_name').notNullable()
+      table.date('birthdate').notNullable()
+      table.enum('level', [
         'maternelle',
         'CP',
         'CE1',
