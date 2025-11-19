@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const auth = useAuth()
+const auth = useAuthStore()
 const router = useRouter()
 
 const email = ref('')
@@ -12,7 +12,7 @@ const handleLogin = async () => {
   loading.value = true
   try {
     await auth.login(email.value, password.value)
-    router.push('/profile')
+    router.push('/eleves')
   } catch (err: any) {
     error.value = err.data?.message || 'Login failed. Please try again.'
   } finally {

@@ -3,7 +3,9 @@ import { defineStore } from 'pinia'
 export interface User {
   id: number
   email: string
-  fullName: string | null
+  nom: string | null
+  prenom: string | null
+  type: 'enseignant'
 }
 
 export const useAuthStore = defineStore('auth', {
@@ -25,11 +27,11 @@ export const useAuthStore = defineStore('auth', {
       await this.fetchProfile()
     },
 
-    async signup(email: string, password: string, fullName: string) {
+    async signup(email: string, password: string, nom: string, prenom: string) {
       const api = useAPI()
       await api('/signup', {
         method: 'POST',
-        body: { email, password, fullName },
+        body: { email, password, nom, prenom, type: 'enseignant' },
       })
       await this.fetchProfile()
     },
@@ -40,11 +42,12 @@ export const useAuthStore = defineStore('auth', {
         const user = await api<User>('/me', {
           method: 'GET',
         })
-        // S'assurer que les données sont correctement assignées
         this.user = {
           id: user.id,
           email: user.email,
-          fullName: user.fullName ?? null,
+          nom: user.nom ?? null,
+          prenom: user.prenom ?? null,
+          type: user.type,
         }
       } catch (error) {
         this.user = null

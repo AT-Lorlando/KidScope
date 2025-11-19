@@ -1,10 +1,11 @@
 <script setup lang="ts">
-const auth = useAuth()
+const auth = useAuthStore()
 const router = useRouter()
 
 const email = ref('')
 const password = ref('')
-const fullName = ref('')
+const nom = ref('')
+const prenom = ref('')
 const error = ref('')
 const loading = ref(false)
 
@@ -12,8 +13,8 @@ const handleSignup = async () => {
   error.value = ''
   loading.value = true
   try {
-    await auth.signup(email.value, password.value, fullName.value)
-    router.push('/profile')
+    await auth.signup(email.value, password.value, nom.value, prenom.value)
+    router.push('/eleves')
   } catch (err: any) {
     error.value = err.data?.message || 'Signup failed. Please try again.'
   } finally {
@@ -38,12 +39,22 @@ definePageMeta({
             {{ error }}
           </div>
           <div class="space-y-2">
-            <label for="fullName" class="text-sm font-medium">Full Name</label>
+            <label for="nom" class="text-sm font-medium">Nom</label>
             <Input
-              id="fullName"
-              v-model="fullName"
+              id="nom"
+              v-model="nom"
               type="text"
-              placeholder="John Doe"
+              placeholder="Dupont"
+              required
+            />
+          </div>
+          <div class="space-y-2">
+            <label for="prenom" class="text-sm font-medium">Prénom</label>
+            <Input
+              id="prenom"
+              v-model="prenom"
+              type="text"
+              placeholder="Jean"
               required
             />
           </div>
