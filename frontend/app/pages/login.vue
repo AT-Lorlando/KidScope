@@ -12,7 +12,7 @@ const handleLogin = async () => {
   loading.value = true
   try {
     await auth.login(email.value, password.value)
-    router.push('/eleves')
+    router.push('/students')
   } catch (err: any) {
     error.value = err.data?.message || 'Login failed. Please try again.'
   } finally {

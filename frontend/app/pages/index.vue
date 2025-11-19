@@ -4,7 +4,7 @@ const router = useRouter()
 
 onMounted(async () => {
   if (authStore.isAuthenticated) {
-    router.push('/eleves')
+    router.push('/students')
   } else {
     router.push('/login')
   }

@@ -1,17 +1,19 @@
 <script setup lang="ts">
+import type { Student } from '~/types'
+
 definePageMeta({
   middleware: 'auth',
 })
 
-const elevesStore = useElevesStore()
+const studentsStore = useStudentsStore()
 const router = useRouter()
 
-const eleves = ref<Eleve[]>([])
+const students = ref<Student[]>([])
 const loading = ref(false)
 const searchTerm = ref('')
-const niveauFilter = ref<string | null>(null)
+const levelFilter = ref<string | null>(null)
 
-const niveaux = [
+const levels = [
   'maternelle',
   'CP',
   'CE1',
@@ -30,36 +32,36 @@ const niveaux = [
 onMounted(async () => {
   loading.value = true
   try {
-    await elevesStore.fetchAll()
-    eleves.value = elevesStore.eleves
+    await studentsStore.fetchAll()
+    students.value = studentsStore.students
   } catch (error) {
-    console.error('Erreur lors du chargement des élèves:', error)
+    console.error('Error loading students:', error)
   } finally {
     loading.value = false
   }
 })
 
-const filteredEleves = computed(() => {
-  let filtered = eleves.value
+const filteredStudents = computed(() => {
+  let filtered = students.value
 
   if (searchTerm.value) {
     const term = searchTerm.value.toLowerCase()
     filtered = filtered.filter(
-      (eleve: any) =>
-        eleve.nom.toLowerCase().includes(term) ||
-        eleve.prenom.toLowerCase().includes(term)
+      (student: Student) =>
+        student.lastName.toLowerCase().includes(term) ||
+        student.firstName.toLowerCase().includes(term)
     )
   }
 
-  if (niveauFilter.value) {
-    filtered = filtered.filter((eleve: any) => eleve.niveau === niveauFilter.value)
+  if (levelFilter.value) {
+    filtered = filtered.filter((student: Student) => student.level === levelFilter.value)
   }
 
   return filtered
 })
 
-const goToEleve = (id: number) => {
-  router.push(`/eleves/${id}`)
+const goToStudent = (id: number) => {
+  router.push(`/students/${id}`)
 }
 </script>
 
@@ -67,7 +69,7 @@ const goToEleve = (id: number) => {
   <div class="container mx-auto py-8 px-4">
     <div class="flex justify-between items-center mb-6">
       <h1 class="text-3xl font-bold">Liste des élèves</h1>
-      <Button @click="router.push('/groupes')">Voir les groupes</Button>
+      <Button @click="router.push('/groups')">Voir les groupes</Button>
     </div>
 
     <Card class="mb-6">
@@ -83,11 +85,16 @@ const goToEleve = (id: number) => {
           </div>
           <div>
             <label class="text-sm font-medium mb-2 block">Filtrer par niveau</label>
-            <Select v-model="niveauFilter" class="w-full">
-              <option :value="null">Tous les niveaux</option>
-              <option v-for="niveau in niveaux" :key="niveau" :value="niveau">
-                {{ niveau }}
-              </option>
+            <Select :model-value="levelFilter || 'all'" @update:model-value="(val) => levelFilter = val === 'all' ? null : val">
+              <SelectTrigger class="w-full">
+                <SelectValue placeholder="Tous les niveaux" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Tous les niveaux</SelectItem>
+                <SelectItem v-for="level in levels" :key="level" :value="level">
+                  {{ level }}
+                </SelectItem>
+              </SelectContent>
             </Select>
           </div>
         </div>
@@ -96,26 +103,26 @@ const goToEleve = (id: number) => {
 
     <div v-if="loading" class="text-center py-8">Chargement...</div>
 
-    <div v-else-if="filteredEleves.length === 0" class="text-center py-8 text-muted-foreground">
+    <div v-else-if="filteredStudents.length === 0" class="text-center py-8 text-muted-foreground">
       Aucun élève trouvé
     </div>
 
     <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       <Card
-        v-for="eleve in filteredEleves"
-        :key="eleve.id"
+        v-for="student in filteredStudents"
+        :key="student.id"
         class="cursor-pointer hover:shadow-lg transition-shadow"
-        @click="goToEleve(eleve.id)"
+        @click="goToStudent(student.id)"
       >
         <CardHeader>
-          <CardTitle>{{ eleve.prenom }} {{ eleve.nom }}</CardTitle>
+          <CardTitle>{{ student.firstName }} {{ student.lastName }}</CardTitle>
           <CardDescription>
-            <Badge>{{ eleve.niveau }}</Badge>
+            <Badge>{{ student.level }}</Badge>
           </CardDescription>
         </CardHeader>
         <CardContent>
           <p class="text-sm text-muted-foreground">
-            Né(e) le {{ new Date(eleve.dateNaissance).toLocaleDateString('fr-FR') }}
+            Né(e) le {{ new Date(student.birthdate).toLocaleDateString('fr-FR') }}
           </p>
         </CardContent>
       </Card>

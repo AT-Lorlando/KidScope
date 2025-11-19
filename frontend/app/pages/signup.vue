@@ -4,8 +4,8 @@ const router = useRouter()
 
 const email = ref('')
 const password = ref('')
-const nom = ref('')
-const prenom = ref('')
+const lastName = ref('')
+const firstName = ref('')
 const error = ref('')
 const loading = ref(false)
 
@@ -13,8 +13,8 @@ const handleSignup = async () => {
   error.value = ''
   loading.value = true
   try {
-    await auth.signup(email.value, password.value, nom.value, prenom.value)
-    router.push('/eleves')
+    await auth.signup(email.value, password.value, firstName.value, lastName.value)
+    router.push('/students')
   } catch (err: any) {
     error.value = err.data?.message || 'Signup failed. Please try again.'
   } finally {
@@ -39,22 +39,22 @@ definePageMeta({
             {{ error }}
           </div>
           <div class="space-y-2">
-            <label for="nom" class="text-sm font-medium">Nom</label>
+            <label for="firstName" class="text-sm font-medium">Prénom</label>
             <Input
-              id="nom"
-              v-model="nom"
+              id="firstName"
+              v-model="firstName"
               type="text"
-              placeholder="Dupont"
+              placeholder="Jean"
               required
             />
           </div>
           <div class="space-y-2">
-            <label for="prenom" class="text-sm font-medium">Prénom</label>
+            <label for="lastName" class="text-sm font-medium">Nom</label>
             <Input
-              id="prenom"
-              v-model="prenom"
+              id="lastName"
+              v-model="lastName"
               type="text"
-              placeholder="Jean"
+              placeholder="Dupont"
               required
             />
           </div>

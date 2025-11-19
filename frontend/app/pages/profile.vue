@@ -33,7 +33,7 @@ const handleLogout = async () => {
         <div v-else-if="user" class="space-y-4">
           <div>
             <label class="text-sm font-medium text-muted-foreground">Full Name</label>
-            <p class="text-lg">{{ user.fullName || 'Not set' }}</p>
+            <p class="text-lg">{{ user.firstName || '' }} {{ user.lastName || 'Not set' }}</p>
           </div>
           <div>
             <label class="text-sm font-medium text-muted-foreground">Email</label>

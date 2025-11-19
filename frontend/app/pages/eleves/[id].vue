@@ -44,7 +44,14 @@ onMounted(async () => {
 
 const handleAddEvent = async () => {
   try {
-    await evenementsStore.create(eleveId.value, newEvent.value)
+    const date = newEvent.value.date
+    if (!date) {
+      throw new Error('La date est requise')
+    }
+    await evenementsStore.create(eleveId.value, {
+      ...newEvent.value,
+      date,
+    })
     evenements.value = await evenementsStore.fetchByEleve(eleveId.value)
     showAddEventForm.value = false
     newEvent.value = {
