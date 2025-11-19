@@ -5,7 +5,13 @@ import { signupValidator, loginValidator } from '#validators/auth_validator'
 export default class AuthController {
   async signup({ request, auth, response }: HttpContext) {
     const payload = await request.validateUsing(signupValidator)
-    const user = await User.create(payload)
+    const user = await User.create({
+      firstName: payload.firstName,
+      lastName: payload.lastName,
+      email: payload.email,
+      password: payload.password,
+      role: 'teacher', // For now only teachers can signup
+    })
     await auth.use('web').login(user)
     return response.ok({ message: 'User created successfully', user })
   }
@@ -28,10 +34,9 @@ export default class AuthController {
     return response.ok({
       id: user.id,
       email: user.email,
-      nom: user.nom,
-      prenom: user.prenom,
-      type: user.type,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      role: user.role,
     })
   }
 }
-

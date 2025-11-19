@@ -4,7 +4,7 @@ import { compose } from '@adonisjs/core/helpers'
 import { BaseModel, column, hasMany } from '@adonisjs/lucid/orm'
 import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
 import type { HasMany } from '@adonisjs/lucid/types/relations'
-import Groupe from './groupe.js'
+import Group from './group.js'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['email'],
@@ -12,6 +12,8 @@ const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
 })
 
 export default class User extends compose(BaseModel, AuthFinder) {
+  static table = 'users'
+
   @column({ isPrimary: true })
   declare id: number
 
@@ -19,13 +21,13 @@ export default class User extends compose(BaseModel, AuthFinder) {
   declare fullName: string | null
 
   @column()
-  declare nom: string | null
+  declare lastName: string | null
 
   @column()
-  declare prenom: string | null
+  declare firstName: string | null
 
   @column()
-  declare type: 'enseignant'
+  declare role: 'teacher'
 
   @column()
   declare email: string
@@ -39,6 +41,6 @@ export default class User extends compose(BaseModel, AuthFinder) {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
 
-  @hasMany(() => Groupe)
-  declare groupes: HasMany<typeof Groupe>
+  @hasMany(() => Group)
+  declare groups: HasMany<typeof Group>
 }

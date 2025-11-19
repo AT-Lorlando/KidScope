@@ -2,9 +2,11 @@ import { DateTime } from 'luxon'
 import { BaseModel, column, belongsTo, manyToMany } from '@adonisjs/lucid/orm'
 import type { BelongsTo, ManyToMany } from '@adonisjs/lucid/types/relations'
 import User from './user.js'
-import Eleve from './eleve.js'
+import Student from './student.js'
 
-export default class Groupe extends BaseModel {
+export default class Group extends BaseModel {
+  static table = 'groups'
+
   @column({ isPrimary: true })
   declare id: number
 
@@ -12,7 +14,7 @@ export default class Groupe extends BaseModel {
   declare userId: number
 
   @column()
-  declare nom: string
+  declare name: string
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
@@ -23,8 +25,10 @@ export default class Groupe extends BaseModel {
   @belongsTo(() => User)
   declare user: BelongsTo<typeof User>
 
-  @manyToMany(() => Eleve, {
-    pivotTable: 'groupe_eleve',
+  @manyToMany(() => Student, {
+    pivotTable: 'group_student',
+    pivotForeignKey: 'group_id',
+    pivotRelatedForeignKey: 'student_id',
   })
-  declare eleves: ManyToMany<typeof Eleve>
+  declare students: ManyToMany<typeof Student>
 }
