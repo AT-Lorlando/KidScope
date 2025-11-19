@@ -35,6 +35,8 @@ services:
       LOG_LEVEL: info
     ports:
       - '3333:3333'
+    volumes:
+      - ./backend/storage:/app/storage
     depends_on:
       postgres:
         condition: service_healthy
