@@ -28,7 +28,9 @@ export default class AuthController {
     return response.ok({
       id: user.id,
       email: user.email,
-      fullName: user.fullName,
+      nom: user.nom,
+      prenom: user.prenom,
+      type: user.type,
     })
   }
 }
