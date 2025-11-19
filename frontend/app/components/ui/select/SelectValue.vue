@@ -1,21 +1,15 @@
 <script setup lang="ts">
-import type { HTMLAttributes } from 'vue'
-import { cn } from '@/lib/utils'
+import type { SelectValueProps } from "reka-ui"
+import { SelectValue } from "reka-ui"
 
-interface Props {
-  placeholder?: string
-  class?: HTMLAttributes['class']
-}
-
-const props = defineProps<Props>()
+const props = defineProps<SelectValueProps>()
 </script>
 
 <template>
-  <span :class="cn('text-muted-foreground', props.class)">
-    <slot>{{ placeholder }}</slot>
-  </span>
+  <SelectValue
+    data-slot="select-value"
+    v-bind="props"
+  >
+    <slot />
+  </SelectValue>
 </template>
-
-
-
-

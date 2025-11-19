@@ -1,25 +1,17 @@
 <script setup lang="ts">
-import type { PrimitiveProps } from 'reka-ui'
-import type { HTMLAttributes } from 'vue'
-import { Primitive } from 'reka-ui'
-import { cn } from '@/lib/utils'
+import type { HTMLAttributes } from "vue"
+import { cn } from "@/lib/utils"
 
-interface Props extends PrimitiveProps {
-  class?: HTMLAttributes['class']
-}
-
-const props = withDefaults(defineProps<Props>(), {
-  as: 'div',
-})
+const props = defineProps<{
+  class?: HTMLAttributes["class"]
+}>()
 </script>
 
 <template>
-  <Primitive
-    :as="as"
-    :as-child="asChild"
-    :class="cn('p-6 pt-0', props.class)"
+  <div
+    data-slot="card-content"
+    :class="cn('px-6', props.class)"
   >
     <slot />
-  </Primitive>
+  </div>
 </template>
-
